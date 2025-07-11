@@ -29,20 +29,19 @@ jobs:
         with:
           dotnet-version: 9.0.x
       
-      # - name: Install .NET Wasm Tools
-      #   run: dotnet workload install wasm-tools
+      - name: Install .NET Wasm Tools
+        run: dotnet workload install wasm-tools
       
-      # - name: Restore Dependencies
-      #   run: dotnet restore
-      #   #run: dotnet restore ScreenSound.WebAssembly/ScreenSound.WebAssembly.csproj # Restaura os pacotes NuGet
+      - name: Restore Dependencies
+        run: dotnet restore
       
-      # - name: Build
-      #   run: dotnet build -c Release --no-restore
+      - name: Build
+        run: dotnet build -c Release --no-restore
       
       - name: Publish Blazor WebAssembly
         # Publica o projeto em modo Release para a pasta 'publish/app'
         # Essa pasta 'publish/app' conterá a pasta wwwroot, que é o que precisamos implantar
-        run: dotnet publish ScreenSound.WebAssembly/ScreenSound.WebAssembly.csproj -c Release --output build
+        run: dotnet publish ScreenSound.WebAssembly/ScreenSound.WebAssembly.csproj -c Release -o publish/app
 
       - name: Adjust Base Href
         run: |
@@ -56,10 +55,10 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
-      # - name: Upload Pages Artifact
-      #   uses: actions/upload-pages-artifact@v3 # Faz o upload dos arquivos para o GitHub Pages
-      #   with:
-      #     path: ./publish/app/wwwroot # O diretório que contém os arquivos que serão implantados
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3 # Faz o upload dos arquivos para o GitHub Pages
+        with:
+          path: ./publish/app/wwwroot # O diretório que contém os arquivos que serão implantados
       
       - name: Deploy to GitHub Pages
         id: deployment
