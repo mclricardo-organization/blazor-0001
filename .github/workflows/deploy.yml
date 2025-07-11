@@ -1,34 +1,35 @@
-name: Deploy Blazor WebAssembly to GitHub Pages
+name: gh-pages
 
 on:
   push:
     branches:
-      - main  # Or your main branch name
-# Define as permissões necessárias para o GitHub Pages
-permissions:
+      - main
+
+permissions: 
   contents: write # Permite gravar o conteúdo do repositório
   pages: write   # Permite escrever na branch de pages
   id-token: write # Necessário para autenticação OIDC (segurança)
 
 jobs:
   deploy:
+
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '7.0.x'
+    - name: Publish with dotnet
+      run: dotnet publish --configuration Release --output build
+    # changes the base-tag in index.html from '/' to 'ScreenSound.WebAssembly' to match GitHub Pages repository subdirectory
+    - name: Change base-tag in index.html from / to ScreenSound.WebAssembly
+      run: sed -i 's/<base href="\/" \/>/<base href="\/ScreenSound.WebAssembly\/" \/>/g' build/wwwroot/index.html
+    - name: Commit wwwroot to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+        BRANCH: gh-pages
+        FOLDER: build/wwwroot
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.0.x
-
-      - name: Build and publish Blazor app
-        run: |
-          dotnet publish ./ScreenSound.WebAssembly/ScreenSound.WebAssembly.csproj -c Release -o ./publish
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: ./publish/wwwroot
-          branch: gh-pages
-          clean: true
 
