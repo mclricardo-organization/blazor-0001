@@ -67,3 +67,4 @@ jobs:
         with:
           folder: build/wwwroot
           branch: gh-pages
+
