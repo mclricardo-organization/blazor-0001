@@ -49,7 +49,7 @@ jobs:
           REPO_NAME=$(echo ${{ github.repository }} | awk -F '/' '{print $2}')
           # Modifica o base href no index.html publicado
           # A pasta publish/app é a raiz da nossa publicação, e wwwroot está dentro dela.
-          sed -i 's/<base href="\/" \/>/<base href="\/${REPO_NAME}\/" \/>/g' build/wwwroot/index.html
+          sed -i 's/<base href="\/" \/>/<base href="\/${REPO_NAME}\/" \/>/g' publish/app/wwwroot/index.html
           # Este passo é crucial para Blazor WASM em GitHub Pages de repositórios de projeto.
           # Ele ajusta a tag <base href="/"> para <base href="/seu-repositorio-aqui/"> no arquivo index.html publicado.
       - name: Setup Pages
